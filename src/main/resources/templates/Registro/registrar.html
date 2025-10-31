@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Regístrate como cliente</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+    <link rel="icon" th:href="@{/img/logo.jpg}" type="image/jpg">
+
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-image: url('/img/FondoCinev2.jpg');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .fade-in {
+            animation: fadeIn 1.2s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .is-valid { border-color: #22c55e !important; }
+        .is-invalid { border-color: #ef4444 !important; }
+    </style>
+</head>
+
+<body class="min-h-screen flex items-center justify-center relative overflow-hidden">
+    <!-- Capa oscura -->
+    <div class="absolute inset-0 bg-black bg-opacity-50"></div>
+
+    <!-- Card principal -->
+    <div class="relative flex w-[950px] rounded-3xl shadow-2xl overflow-hidden z-10 bg-white/10 backdrop-blur-md border border-white/20 fade-in">
+
+        <!-- Sección izquierda -->
+        <div class="w-1/2 flex items-center justify-center bg-black/40">
+            <img th:src="@{/img/logo.jpg}" alt="Logo Cine" class="rounded-2xl shadow-lg w-4/5 object-cover">
+        </div>
+
+        <!-- Sección derecha -->
+        <div class="w-1/2 p-8 text-white flex flex-col justify-center">
+            <h2 class="text-3xl font-semibold text-center mb-1">🎬 Regístrate como Cliente</h2>
+            <p class="text-gray-300 text-center mb-6">Forma parte de <span class="text-green-400 font-semibold">CINEMA NIGHTS</span></p>
+
+            <form th:action="@{/register}" th:object="${registroDto}" method="post" id="registroForm" class="space-y-4">
+
+                <!-- Nombres y Apellidos -->
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <input type="text" id="cliente_nombres" th:field="*{cliente.nombres}" 
+                               placeholder="Nombres"
+                               class="w-full px-4 py-2 rounded-xl bg-white/20 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-yellow-400">
+                        <div class="invalid-feedback text-red-400 text-sm mt-1" id="error-nombres"></div>
+                    </div>
+                    <div>
+                        <input type="text" id="cliente_apellidos" th:field="*{cliente.apellidos}" 
+                               placeholder="Apellidos"
+                               class="w-full px-4 py-2 rounded-xl bg-white/20 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-yellow-400">
+                        <div class="invalid-feedback text-red-400 text-sm mt-1" id="error-apellidos"></div>
+                    </div>
+                </div>
+
+                <!-- Género -->
+                <div>
+                    <select id="cliente_genero" th:field="*{cliente.genero}"
+                            class="w-full px-4 py-2 rounded-xl bg-white/20 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-yellow-400">
+                        <option value="" disabled selected>Selecciona tu género</option>
+                        <option value="Hombre">Hombre</option>
+                        <option value="Mujer">Mujer</option>
+                    </select>
+                    <div class="invalid-feedback text-red-400 text-sm mt-1" id="error-genero"></div>
+                </div>
+
+                <!-- Fecha de nacimiento -->
+                <div>
+                    <input type="date" id="cliente_fechaNacimiento" th:field="*{cliente.fechaNacimiento}" 
+                           class="w-full px-4 py-2 rounded-xl bg-white/20 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-yellow-400">
+                    <div class="invalid-feedback text-red-400 text-sm mt-1" id="error-fechaNacimiento"></div>
+                </div>
+
+                <!-- Teléfono -->
+                <div>
+                    <input type="text" id="cliente_telefono" th:field="*{cliente.telefono}" 
+                           placeholder="Teléfono"
+                           class="w-full px-4 py-2 rounded-xl bg-white/20 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-yellow-400">
+                    <div class="invalid-feedback text-red-400 text-sm mt-1" id="error-telefono"></div>
+                </div>
+
+                <!-- Correo -->
+                <div>
+                    <input type="email" id="usuario_correo" th:field="*{usuario.correo}" 
+                           placeholder="Correo electrónico"
+                           class="w-full px-4 py-2 rounded-xl bg-white/20 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-yellow-400">
+                    <div class="invalid-feedback text-red-400 text-sm mt-1" id="error-correo"></div>
+                </div>
+
+                <!-- Contraseña -->
+                <div class="relative">
+                    <input type="password" id="usuario_clave" th:field="*{usuario.clave}" 
+                           placeholder="Contraseña"
+                           class="w-full px-4 py-2 pr-10 rounded-xl bg-white/20 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-yellow-400">
+                    <i id="togglePassword" class="bi bi-eye absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-gray-300 hover:text-yellow-400"></i>
+                    <div class="invalid-feedback text-red-400 text-sm mt-1" id="error-clave"></div>
+                </div>
+
+                <button type="submit" class="w-full bg-green-400 text-black py-2 rounded-xl font-semibold hover:bg-yellow-300 transition">
+                    Registrarse
+                </button>
+
+                <!-- Mensajes -->
+                <div th:if="${error}" class="bg-red-100 text-red-700 px-4 py-2 rounded-md text-center mt-3" th:text="${error}"></div>
+                <div th:if="${success}" class="bg-green-100 text-green-700 px-4 py-2 rounded-md text-center mt-3" th:text="${success}"></div>
+
+                <div class="text-center mt-3">
+                    <p class="text-gray-300">¿Ya tienes una cuenta?
+                        <a th:href="@{/login}" class="text-yellow-400 hover:underline">Inicia sesión</a>
+                    </p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Script validación -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('registroForm');
+            const campos = [
+                "cliente_nombres",
+                "cliente_apellidos",
+                "cliente_genero",
+                "cliente_fechaNacimiento",
+                "cliente_telefono",
+                "usuario_correo",
+                "usuario_clave"
+            ];
+
+            campos.forEach(id => {
+                const input = document.getElementById(id);
+                input.addEventListener('input', () => validarCampo(id));
+            });
+
+            function validarCampo(id) {
+                const input = document.getElementById(id);
+                const value = input.value.trim();
+                let error = "";
+
+                switch (id) {
+                    case "cliente_nombres":
+                        if (!value) error = "Los nombres son obligatorios."; break;
+                    case "cliente_apellidos":
+                        if (!value) error = "Los apellidos son obligatorios."; break;
+                    case "cliente_genero":
+                        if (!value) error = "Debes seleccionar un género."; break;
+                    case "cliente_fechaNacimiento":
+                        if (!value) error = "Debes ingresar tu fecha de nacimiento."; break;
+                    case "cliente_telefono":
+                        if (!/^\d{7,15}$/.test(value)) error = "Teléfono inválido (solo números)."; break;
+                    case "usuario_correo":
+                        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) error = "Correo inválido."; break;
+                    case "usuario_clave":
+                        if (value.length < 6) error = "La contraseña debe tener al menos 6 caracteres."; break;
+                }
+
+                const errorDiv = document.getElementById(`error-${id.split('_')[1]}`);
+                if (error) {
+                    input.classList.remove('is-valid');
+                    input.classList.add('is-invalid');
+                    errorDiv.textContent = error;
+                    return false;
+                } else {
+                    input.classList.remove('is-invalid');
+                    input.classList.add('is-valid');
+                    errorDiv.textContent = "";
+                    return true;
+                }
+            }
+
+            form.addEventListener('submit', function(event) {
+                let valid = true;
+                campos.forEach(id => { if (!validarCampo(id)) valid = false; });
+                if (!valid) event.preventDefault();
+            });
+
+            const togglePassword = document.getElementById('togglePassword');
+            const password = document.getElementById('usuario_clave');
+            togglePassword.addEventListener('click', () => {
+                const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+                password.setAttribute('type', type);
+                togglePassword.classList.toggle('bi-eye');
+                togglePassword.classList.toggle('bi-eye-slash');
+            });
+        });
+    </script>
+</body>
+</html>

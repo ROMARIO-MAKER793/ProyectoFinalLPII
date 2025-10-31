@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Registrar / Editar Película - Cine Online</title>
+
+    <!-- Fuente Poppins -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 font-poppins">
+
+<!-- Header -->
+<div class="fixed top-0 w-full z-50 bg-white shadow-md flex items-center justify-between px-6 py-4">
+    <div class="flex items-center gap-3 text-lg font-semibold text-gray-800">
+        <i class="fa-solid fa-user-shield text-green-500"></i>
+        Panel de Administración - Cine Online
+    </div>
+</div>
+
+<!-- Layout principal -->
+<div class="flex pt-20 min-h-screen">
+
+    <!-- Sidebar -->
+    <div class="w-60 bg-gray-800 text-gray-200 fixed top-20 left-0 h-[calc(100vh-5rem)] overflow-y-auto shadow-lg rounded-r-xl">
+        <nav class="flex flex-col mt-4">
+            <a th:href="@{/mantenimientoPeliculas/lista}" class="flex items-center gap-3 px-6 py-3 rounded-lg hover:bg-gray-700 transition-colors">
+                <i class="fa-solid fa-film text-green-400"></i> Lista de Películas
+            </a>
+            <a th:href="@{/mantenimientoPeliculas/nuevo}" class="flex items-center gap-3 px-6 py-3 rounded-lg bg-gray-700 text-white">
+                <i class="fa-solid fa-plus text-green-400"></i> Registrar Película
+            </a>
+            <a th:href="@{/PaginaAdmin/funciones/listar}" class="flex items-center gap-3 px-6 py-3 rounded-lg hover:bg-gray-700 transition-colors">
+                <i class="fa-solid fa-list text-green-400"></i> Listar Funciones
+            </a>
+            <a th:href="@{/Cliente/listar}" class="flex items-center gap-3 px-6 py-3 rounded-lg hover:bg-gray-700 transition-colors">
+                <i class="fa-solid fa-users text-green-400"></i> Lista de Clientes
+            </a>
+            <a th:href="@{/logout}" class="flex items-center gap-3 px-6 py-3 rounded-lg hover:bg-red-600 transition-colors mt-auto">
+                <i class="fa-solid fa-right-from-bracket text-red-400"></i> Cerrar sesión
+            </a>
+        </nav>
+    </div>
+
+    <!-- Contenido principal -->
+    <div class="ml-60 flex-1 p-8">
+        <div class="max-w-5xl mx-auto">
+
+            <div class="card shadow-lg rounded-2xl">
+                <div class="card-header bg-gradient-to-r from-green-500 to-green-700 text-white text-center py-4 rounded-t-2xl">
+                    <h3 th:text="${pelicula.idPelicula == null} ? '🎬 Nueva Película' : '✏️ Editar Película'" class="text-xl font-semibold"></h3>
+                </div>
+                <div class="card-body p-6 bg-white rounded-b-2xl">
+
+                    <form th:action="@{/mantenimientoPeliculas/guardar}" th:object="${pelicula}" method="post" enctype="multipart/form-data">
+
+                        <input type="hidden" th:field="*{idPelicula}" />
+
+                        <!-- Título -->
+                        <div class="mb-4">
+                            <label for="titulo" class="form-label font-medium">Título</label>
+                            <input type="text" th:field="*{titulo}" id="titulo" class="form-control rounded-lg shadow-sm" required>
+                        </div>
+
+                        <!-- Descripción -->
+                        <div class="mb-4">
+                            <label class="form-label font-medium">Descripción</label>
+                            <textarea th:field="*{descripcion}" class="form-control rounded-lg shadow-sm" rows="3" required></textarea>
+                        </div>
+
+                        <!-- Duración -->
+                        <div class="mb-4">
+                            <label class="form-label font-medium">Duración (min)</label>
+                            <input type="number" th:field="*{duracion}" min="30" class="form-control rounded-lg shadow-sm" required>
+                        </div>
+
+                        <!-- Idioma -->
+                        <div class="mb-4">
+                            <label class="form-label font-medium">Idioma</label>
+                            <input type="text" th:field="*{idioma}" class="form-control rounded-lg shadow-sm" required>
+                        </div>
+
+                        <!-- Clasificación -->
+                        <div class="mb-4">
+                            <label class="form-label font-medium">Clasificación</label>
+                            <select th:field="*{clasificacion.idClasificacion}" class="form-select rounded-lg shadow-sm" required>
+                                <option th:each="c : ${clasificaciones}"
+                                        th:value="${c.idClasificacion}"
+                                        th:text="${c.etiqueta}"
+                                        th:selected="${pelicula.clasificacion != null} ? ${c.idClasificacion} == ${pelicula.clasificacion.idClasificacion} : false">
+                                </option>
+                            </select>
+                        </div>
+
+                        <!-- Géneros -->
+                        <div class="mb-4">
+                            <label class="form-label font-medium">Géneros</label>
+                            <select th:field="*{generos}" multiple class="form-select rounded-lg shadow-sm" required>
+                                <option th:each="g : ${generos}"
+                                        th:value="${g.idGenero}"
+                                        th:text="${g.nombreGenero}"
+                                        th:selected="${pelicula.generos != null} ? ${pelicula.generos.contains(g)} : false">
+                                </option>
+                            </select>
+                            <small class="text-muted">Mantén presionada Ctrl (o Cmd en Mac) para seleccionar varios.</small>
+                        </div>
+
+                        <!-- Fecha de estreno -->
+                        <div class="mb-4">
+                            <label class="form-label font-medium">Fecha de Estreno</label>
+                            <input type="date" th:field="*{fechaEstreno}" class="form-control rounded-lg shadow-sm" required>
+                        </div>
+
+                        <!-- Precio -->
+                        <div class="mb-4">
+                            <label class="form-label font-medium">Precio (S/)</label>
+                            <input type="number" th:field="*{precio}" step="0.10" min="0" class="form-control rounded-lg shadow-sm" required>
+                        </div>
+
+                        <!-- Estado -->
+                        <div class="mb-4">
+                            <label class="form-label font-medium">Estado</label>
+                            <select th:field="*{estado}" class="form-select rounded-lg shadow-sm">
+                                <option value="ACTIVO" th:selected="${pelicula.estado == 'ACTIVO'}">Activo</option>
+                                <option value="INACTIVO" th:selected="${pelicula.estado == 'INACTIVO'}">Inactivo</option>
+                            </select>
+                        </div>
+
+                        <!-- Imagen -->
+                        <div class="mb-4">
+                            <label class="form-label font-medium">Imagen actual</label>
+                            <div th:if="${pelicula.imagen != null}">
+                                <img th:src="@{/img/{img}(img=${pelicula.imagen})}" class="img-thumbnail max-w-[150px] mb-2">
+                            </div>
+                            <label class="form-label mt-2">Cambiar Imagen</label>
+                            <input type="file" name="imagenArchivo" class="form-control rounded-lg shadow-sm">
+                        </div>
+
+                        <!-- Botón Guardar -->
+                        <div class="text-center mt-5">
+                            <button type="submit" class="btn btn-primary btn-lg px-5">
+                                <i class="fa-solid fa-floppy-disk"></i> Guardar
+                            </button>
+                        </div>
+
+                    </form>
+
+                    <!-- Mensajes -->
+                    <div th:if="${msg != null} and ${msg == 'ok'}" class="alert alert-success mt-4 text-center">
+                        ✅ La película se guardó correctamente.
+                        <div class="mt-3">
+                            <a th:href="@{/mantenimientoPeliculas/lista}" class="btn btn-outline-info me-2">
+                                <i class="fa-solid fa-film"></i> Ver Películas
+                            </a>
+                            <a th:href="@{/PaginaAdmin}" class="btn btn-outline-secondary">
+                                <i class="fa-solid fa-house"></i> Panel Admin
+                            </a>
+                        </div>
+                    </div>
+
+                    <div th:if="${msg != null} and ${msg == 'exception'}" class="alert alert-danger mt-4 text-center">
+                        ❌ Ocurrió un error al guardar la película.
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/script/validarPelicula.js"></script>
+
+</body>
+</html>
+

@@ -1,0 +1,118 @@
+	<!DOCTYPE html>
+	<html xmlns:th="http://www.thymeleaf.org" lang="es">
+	<head>
+	    <meta charset="UTF-8">
+	    <title>Iniciar Sesión - Cine Online</title>
+		 <!-- Tailwind CSS -->
+		    <script src="https://cdn.tailwindcss.com"></script>
+	
+		    <!-- Bootstrap Icons -->
+		    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+	
+		    <!-- Google Fonts: Poppins -->
+		    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+	
+		    <!-- Favicon -->
+		    <link rel="icon" th:href="@{/img/logo.jpg}" type="image/jpg">
+	
+		    <style>
+		        body {
+		            font-family: 'Poppins', sans-serif;
+		            background-image: url('/img/FondoCinev2.jpg'); /* Fondo principal */
+		            background-size: cover;
+		            background-position: center;
+		        }
+				
+				.fade-in {
+				          animation: fadeIn 1.2s ease-in-out;
+				      }
+	
+				      @keyframes fadeIn {
+				          from { opacity: 0; transform: translateY(20px); }
+				          to { opacity: 1; transform: translateY(0); }
+				      }
+		    </style>
+		</head>
+	
+		<body class="min-h-screen flex items-center justify-center relative overflow-hidden">
+	
+		    <!-- Capa de oscurecimiento -->
+		    <div class="absolute inset-0 bg-black bg-opacity-50 "></div>
+	
+		    <!-- Card principal -->
+		    <div class="relative flex w-[900px] rounded-3xl shadow-2xl overflow-hidden z-10 bg-white/10 backdrop-blur-md border border-white/20 fade-in">
+	
+		        <!-- Sección izquierda con imagen o logo -->
+		        <div class="w-1/2 flex items-center justify-center bg-black/40">
+		            <img th:src="@{/img/logo.jpg}" alt="Logo Cine" class="rounded-2xl shadow-lg w-4/5 object-cover">
+		        </div>
+	
+		        <!-- Sección derecha con formulario -->
+		        <div class="w-1/2 p-10 text-white flex flex-col justify-center">
+	
+		            <h2 class="text-3xl font-semibold mb-1 text-center flex items-center justify-center gap-2">
+		                <i class=" text-yellow-400"></i> Bienvenido a
+		            </h2>
+		            <h1 class="text-4xl font-bold text-center text-green-400 mb-6">CINEMA NIGHTS</h1>
+	
+		            <!-- Mensajes -->
+		            <div th:if="${param.error}" class="bg-red-100 text-red-700 px-4 py-2 rounded-md mb-4 text-center">
+		                ❌ Correo o contraseña incorrectos. Inténtalo nuevamente.
+		            </div>
+		            <div th:if="${param.logout}" class="bg-green-100 text-green-700 px-4 py-2 rounded-md mb-4 text-center">
+		                ✅ Has cerrado sesión correctamente.
+		            </div>
+	
+		            <!-- Formulario -->
+		            <form th:action="@{/procesarLogin}" method="post" id="loginform" class="space-y-4">
+		                <div class="relative">
+		                    <i class="bi bi-envelope absolute left-3 top-1/2 -translate-y-1/2 text-gray-300"></i>
+		                    <input type="email" name="correo" placeholder="Correo electrónico" required
+		                           class="w-full pl-10 pr-4 py-2 rounded-xl bg-white/20 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-yellow-400">
+		                </div>
+	
+						<div class="relative">
+						    <i class="bi bi-lock-fill absolute left-3 top-1/2 -translate-y-1/2 text-gray-300"></i>
+						    <input type="password" name="clave" placeholder="Contraseña" required
+						           class="w-full pl-10 pr-10 py-2 rounded-xl bg-white/20 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-yellow-400">
+						    <i id="togglePassword" class="bi bi-eye absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-gray-300 hover:text-yellow-400"></i>
+						</div>
+	
+	
+		                <button type="submit"
+		                        class="w-full bg-green-400 text-black py-2 rounded-xl font-semibold hover:bg-yellow-300 transition">
+		                    Entrar
+		                </button>
+		            </form>
+	
+		            <p class="text-center text-gray-300 mt-4">
+		                ¿No tienes cuenta?
+		                <a th:href="@{/register}" class="text-yellow-400 hover:underline">Regístrate</a>
+		            </p>
+	
+		            <hr class="my-6 border-gray-400/50">
+	
+		            <!-- Continuar sin login -->
+		            <a th:href="@{/PaginaWeb/index}"
+		               class="w-full block text-center bg-white/20 hover:bg-white/30 text-yellow-300 py-2 rounded-xl font-semibold transition">
+		                Continuar sin iniciar sesión
+		            </a>
+	
+		        </div>
+		    </div>
+	
+		<script>
+		    // Ojo para mostrar/ocultar contraseña
+		    const password = document.getElementById('password');
+		    const togglePassword = document.getElementById('togglePassword');
+	
+		    togglePassword.addEventListener('click', () => {
+		        const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+		        password.setAttribute('type', type);
+		        togglePassword.classList.toggle('bi-eye');
+		        togglePassword.classList.toggle('bi-eye-slash');
+		    });
+		</script>
+	
+	</body>
+	</html>

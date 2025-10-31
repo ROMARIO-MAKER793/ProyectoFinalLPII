@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reserva Exitosa -CinemaNights</title>
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Animate.css -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+  <!-- Fuente -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+</head>
+<body class="bg-gray-100 text-gray-900 font-[Poppins] flex flex-col min-h-screen">
+
+  <!-- 🌟 NAVBAR -->
+  <nav class="bg-gray-900 text-white p-4 flex justify-between items-center shadow-lg">
+    <h1 class="text-2xl font-bold text-red-500 tracking-wide">🎬 CinemaNights</h1>
+
+    <ul class="flex space-x-6 font-semibold text-sm uppercase tracking-wide">
+      <li><a th:href="@{/PaginaWeb/index}" class="hover:text-red-400 transition">Inicio</a></li>
+      <li><a th:href="@{/cartelera}" class="hover:text-red-400 transition">Películas</a></li>
+      <li><a th:href="@{/nosotros}" class="hover:text-red-400 transition">Nosotros</a></li>
+      <li><a th:href="@{/contacto}" class="hover:text-red-400 transition">Contacto</a></li>
+    </ul>
+
+    <div class="flex items-center gap-4">
+      <div sec:authorize="isAuthenticated()" class="flex items-center gap-3">
+        <span class="text-sm">👋 Bienvenido, <strong th:text="${nombreCom}" class="text-red-400"></strong></span>
+        <a th:href="@{/logout}" class="bg-white text-black px-3 py-1 rounded-md font-semibold hover:bg-gray-200 transition text-sm">
+          Cerrar sesión
+        </a>
+      </div>
+
+      <div sec:authorize="!isAuthenticated()" class="flex gap-3">
+        <a th:href="@{/login}" class="px-4 py-2 rounded-md font-semibold bg-white text-black hover:bg-gray-200 transition text-sm">
+          Iniciar sesión
+        </a>
+        <a th:href="@{/registro}" class="px-4 py-2 rounded-md font-semibold bg-red-600 text-white hover:bg-red-700 transition text-sm">
+          Registrarse
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ✅ CONTENIDO PRINCIPAL -->
+  <main class="flex-grow flex justify-center items-center py-16 px-6">
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl text-center p-10 animate__animated animate__fadeIn">
+      <i class="bi bi-check-circle-fill text-green-500 text-6xl mb-4"></i>
+      <h1 class="text-3xl font-bold text-green-600 mb-2">¡Reserva Exitosa!</h1>
+      <p class="text-gray-600 mb-6">Tu reserva se ha realizado correctamente. 🎉</p>
+
+      <!-- 📝 Resumen -->
+      <div class="text-left bg-gray-50 rounded-xl p-6 border border-gray-200">
+        <h4 class="text-lg font-semibold text-red-600 mb-3">Resumen de tu reserva</h4>
+        <ul class="space-y-2 text-gray-700">
+          <li><strong>Película:</strong>
+            <span th:text="${reserva.funcion != null && reserva.funcion.pelicula != null 
+                            ? reserva.funcion.pelicula.titulo 
+                            : 'Sin información'}"></span>
+          </li>
+          <li><strong>Fecha:</strong>
+            <span th:text="${#temporals.format(reserva.funcion.fechaFuncion, 'dd/MM/yyyy')}">27/10/2025</span>
+          </li>
+          <li><strong>Hora:</strong>
+            <span th:text="${#temporals.format(reserva.funcion.horaInicio, 'HH:mm')}">18:30</span>
+          </li>
+          <li><strong>Asientos:</strong>
+            <span th:text="${reserva.detalles != null and !reserva.detalles.isEmpty() 
+                            ? T(java.lang.String).join(', ', reserva.detalles.![numeroAsiento != null ? numeroAsiento : 'No asignado'])
+                            : 'No especificado'}"></span>
+          </li>
+          <li><strong>Total pagado:</strong>
+            <span th:text="'S/ ' + ${reserva.total}" class="font-semibold text-gray-800">S/ 42.00</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- 🔘 Botones -->
+      <div class="mt-8 flex flex-col sm:flex-row justify-center gap-4">
+        <a th:href="@{/PaginaWeb/index}"
+           class="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg font-semibold flex items-center justify-center gap-2 transition">
+          <i class="bi bi-house-door-fill"></i> Volver al inicio
+        </a>
+
+        <a th:href="@{/reserva/comprobante/{id}(id=${reserva.idReserva})}"
+           class="border border-gray-700 text-gray-800 hover:bg-gray-800 hover:text-white px-6 py-2 rounded-lg font-semibold flex items-center justify-center gap-2 transition">
+          <i class="bi bi-file-earmark-arrow-down"></i> Descargar comprobante
+        </a>
+      </div>
+    </div>
+  </main>
+
+ 
+  <!-- ⚫ FOOTER -->
+  	<footer class="bg-black text-white pt-10 pb-6">
+  	  <div class="container mx-auto px-4">
+  	    <div class="flex flex-col md:flex-row justify-between items-center md:items-start gap-8">
+  	      <div class="text-center md:text-left">
+  	        <h2 class="text-2xl font-bold text-red-500 mb-2">🎬 CinemaNights</h2>
+  	        <p class="text-white max-w-sm">La mejor experiencia de cine, con promociones, dulcería y preventas exclusivas para nuestros clientes.</p>
+  	      </div>
+  	      <div class="text-center md:text-left">
+  	        <h3 class="font-semibold mb-2">Enlaces</h3>
+  	        <ul>
+  	          <li><a th:href="@{/PaginaWeb/index}" class="hover:text-red-500 transition-colors">Inicio</a></li>
+  	          <li><a th:href="@{/cartelera}" class="hover:text-red-500 transition-colors">Películas</a></li>
+  			  <li><a th:href="@{/nosotros}" class="hover:text-red-500 transition-colors">Nosotros</a></li>
+  	          <li><a th:href="@{/contacto}" class="hover:text-red-500 transition-colors">Contacto</a></li>
+  	        </ul>
+  	      </div>
+  	      <div class="text-center md:text-left">
+  	        <h3 class="font-semibold mb-2">Síguenos</h3>
+  	        <div class="flex gap-4 justify-center md:justify-start">
+  	          <a href="#" class="text-white hover:text-red-500 text-xl transition-colors"><i class="bi bi-facebook"></i></a>
+  	          <a href="#" class="text-white hover:text-red-500 text-xl transition-colors"><i class="bi bi-instagram"></i></a>
+  	          <a href="#" class="text-white hover:text-red-500 text-xl transition-colors"><i class="bi bi-twitter"></i></a>
+  	          <a href="#" class="text-white hover:text-red-500 text-xl transition-colors"><i class="bi bi-youtube"></i></a>
+  	        </div>
+  	      </div>
+  	      <div class="text-center md:text-left">
+  	        <h3 class="font-semibold mb-2">Contacto</h3>
+  	        <p class="text-white"><i class="bi bi-geo-alt-fill me-1"></i> Av.CinemaNights 123, Lima, Perú</p>
+  	        <p class="text-white"><i class="bi bi-telephone-fill me-1"></i> +51 987 654 321</p>
+  	        <p class="text-white"><i class="bi bi-envelope-fill me-1"></i> info@CinemaNights.com</p>
+  	      </div>
+  	    </div>
+  	    <hr class="my-6 border-gray-700">
+  	    <p class="text-center  text-white font-bold text-sm">&copy; 2025 CinemaNights. Todos los derechos reservados.</p>
+  	  </div>
+  	</footer>
+</body>
+</html>

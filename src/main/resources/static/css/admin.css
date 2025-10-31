@@ -1,0 +1,168 @@
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: "Segoe UI", sans-serif;
+}
+
+body {
+    background-color: #f4f6f9;
+}
+
+.header {
+
+	background: linear-gradient(90deg, #1a237e, #3949ab);
+	    color: white;
+	    padding: 16px 24px;
+	    font-size: 20px;
+	    font-weight: bold;
+	    position: fixed;
+	    top: 0;
+	    width: 100%;
+	    z-index: 100;
+	    display: flex;
+	    align-items: center;
+	    justify-content: space-between;
+}
+
+
+.main-layout {
+    display: flex;
+    padding-top: 60px;
+    min-height: 100vh;
+}
+
+.sidebar {
+	width: 220px;
+	 background: linear-gradient(180deg, #283593, #1a237e);
+	 padding-top: 20px;
+	 position: fixed;
+	 top: 60px;
+	 left: 0;
+	 height: calc(100vh - 60px);
+	 overflow-y: auto;
+}
+
+.sidebar a {
+    display: block;
+    padding: 14px 20px;
+    color: #cfd8dc;
+    text-decoration: none;
+    transition: 0.3s;
+    font-weight: 500;
+}
+
+.sidebar a:hover {
+    background-color: #3949ab;
+    color: #fff;
+}
+.enlace-activado{
+	 background-color: #3949ab !important;
+    color: #fff !important;
+}
+/* Contenido principal */
+.content {
+    margin-left: 220px;
+    padding: 30px;
+    width: 100%;
+}
+
+/* Tabla */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: #fff;
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+th, td {
+    padding: 14px 16px;
+    text-align: left;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+th {
+    background-color: #f0f0f0;
+}
+
+tr:hover {
+    background-color: #fafafa;
+}
+
+
+.btn {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.btn-edit {
+    background-color: #ffb300;
+    color: white;
+}
+
+.btn-delete {
+    background-color: #e53935;
+    color: white;
+}
+
+.btn-view {
+    background-color: #43a047;
+    color: white;
+}
+
+.btn + .btn {
+    margin-left: 8px;
+}
+/* FORM */
+.form-card {
+    border: none;
+    margin-top: 40px;
+}
+
+.gradient-header {
+    background: linear-gradient(90deg, #283593, #1e88e5);
+}
+
+/* HOVER SUAVE EN CARDS */
+.cards div {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.cards div:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+}
+
+/* BOTÓN FLOTANTE */
+.btn-float {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: linear-gradient(135deg, #3949ab, #5c6bc0);
+    color: white;
+    padding: 15px 20px;
+    border-radius: 50%;
+    font-size: 24px;
+    text-decoration: none;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    transition: 0.3s;
+    z-index: 999;
+}
+
+.btn-float:hover {
+    transform: scale(1.1);
+    background: linear-gradient(135deg, #303f9f, #3949ab);
+    color: #fff;
+}
+
+.was-validated .form-control:valid,
+.form-control:valid {
+    background-image: none; /* quita el check por defecto */
+}

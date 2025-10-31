@@ -1,0 +1,48 @@
+/*@import url('https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css');
+
+body {
+  background-color: #f8f9fa;
+  padding-top: 80px;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.success-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 70vh;
+}
+
+.card {
+  background-color: white;
+  border-radius: 15px;
+  border: none;
+}
+
+.resumen ul {
+  border: none;
+}
+
+.resumen h4 {
+  color: #d32f2f;
+  font-weight: bold;
+}
+
+.btn-danger {
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.btn-danger:hover {
+  background-color: #b71c1c;
+}
+
+.btn-outline-dark {
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.btn-outline-dark:hover {
+  background-color: #212529;
+  color: white;
+}*/

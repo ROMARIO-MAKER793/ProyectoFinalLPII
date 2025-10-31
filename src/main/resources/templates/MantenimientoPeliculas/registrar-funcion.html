@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Registrar Función - Cine Online</title>
+
+    <!-- Fuente Poppins -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 font-poppins">
+
+<!-- Header -->
+<div class="fixed top-0 w-full z-50 bg-white shadow-md flex items-center justify-between px-6 py-4">
+    <div class="flex items-center gap-3 text-lg font-semibold text-gray-800">
+        <i class="fa-solid fa-film text-yellow-500"></i> Registrar Función
+    </div>
+    <div class="text-gray-600">
+        Bienvenido: <span th:text="${adminNombre}">admin@example.com</span>
+    </div>
+</div>
+
+<!-- Layout principal -->
+<div class="flex pt-20 min-h-screen">
+
+    <!-- Sidebar -->
+    <div class="w-60 bg-gray-800 text-gray-200 fixed top-20 left-0 h-[calc(100vh-5rem)] overflow-y-auto shadow-lg rounded-r-xl">
+        <nav class="flex flex-col mt-4">
+            <a th:href="@{/mantenimientoPeliculas/lista}" class="flex items-center gap-3 px-6 py-3 rounded-lg hover:bg-gray-700 transition-colors">
+                <i class="fa-solid fa-film text-green-400"></i> Lista de Películas
+            </a>
+            <a th:href="@{/mantenimientoPeliculas/nuevo}" class="flex items-center gap-3 px-6 py-3 rounded-lg hover:bg-gray-700 transition-colors">
+                <i class="fa-solid fa-plus text-green-400"></i> Registrar Película
+            </a>
+            <a th:href="@{/PaginaAdmin/funciones/listar}" class="flex items-center gap-3 px-6 py-3 rounded-lg hover:bg-gray-700 transition-colors">
+                <i class="fa-solid fa-list text-yellow-400"></i> Listar Funciones
+            </a>
+            <a th:href="@{/Cliente/listar}" class="flex items-center gap-3 px-6 py-3 rounded-lg hover:bg-gray-700 transition-colors">
+                <i class="fa-solid fa-users text-green-400"></i> Lista de Clientes
+            </a>
+            <a th:href="@{/logout}" class="flex items-center gap-3 px-6 py-3 rounded-lg hover:bg-red-600 transition-colors mt-auto">
+                <i class="fa-solid fa-right-from-bracket text-red-400"></i> Cerrar sesión
+            </a>
+        </nav>
+    </div>
+
+    <!-- Contenido principal -->
+    <div class="ml-60 flex-1 p-8">
+        <div class="max-w-4xl mx-auto">
+            
+            <h2 class="text-center text-2xl font-bold text-blue-600 mb-6" th:text="'Registrar función para: ' + ${pelicula.titulo}"></h2>
+            
+            <!-- Formulario -->
+            <div class="card shadow-lg rounded-2xl p-6 bg-white mb-6">
+                <form th:action="@{/PaginaAdmin/funciones/guardar}" th:object="${funcion}" method="post">
+                    <input type="hidden" name="peliculaId" th:value="${pelicula.idPelicula}" />
+                    <div class="mb-4">
+                        <label for="sala" class="form-label fw-semibold">Sala</label>
+                        <select id="sala" class="form-select" th:field="*{sala.idSala}" required>
+                            <option value="" disabled selected>Selecciona una sala</option>
+                            <option th:each="s : ${salas}" th:value="${s.idSala}" th:text="${s.nombreSala}"></option>
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label for="fecha" class="form-label fw-semibold">Fecha</label>
+                        <input type="date" id="fecha" class="form-control" th:field="*{fechaFuncion}" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="horaInicio" class="form-label fw-semibold">Hora de Inicio</label>
+                        <input type="time" class="form-control" id="horaInicio" required>
+                        <div id="errorCruce" class="text-danger mt-1 hidden">⚠️ Este horario se cruza con otra función.</div>
+                    </div>
+                    <div class="mb-4">
+                        <label for="horaFin" class="form-label fw-semibold">Hora de Fin</label>
+                        <input type="time" id="horaFin" class="form-control" readonly>
+                    </div>
+                    <input type="hidden" name="horaInicio" id="horaInicioHidden" th:field="*{horaInicio}">
+                    <input type="hidden" name="horaFin" id="horaFinHidden" th:field="*{horaFin}">
+                    <div class="flex justify-center mt-6">
+                        <button type="submit" class="btn btn-warning text-dark fw-bold">
+                            <i class="fa-solid fa-plus"></i> Registrar Función
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Mensaje -->
+            <div id="msgFuncion" class="alert alert-success mt-4 text-center hidden">
+                ✅ Función registrada correctamente.
+                <div class="mt-3">
+                    <a th:href="@{/mantenimientoPeliculas/lista}" class="btn btn-outline-primary">
+                        <i class="fa-solid fa-film"></i> Registrar otra función
+                    </a>
+                </div>
+            </div>
+
+            <!-- Tabla de funciones existentes -->
+            <div class="card shadow-lg rounded-2xl p-4 bg-white">
+                <h4 class="text-center text-gray-700 mb-4" id="tituloListaFunciones">Funciones existentes</h4>
+                <table class="table table-bordered table-striped">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Pelicula</th>
+                            <th>Sala</th>
+                            <th>Fecha</th>
+                            <th>Hora Inicio</th>
+                            <th>Hora Fin</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbodyFunciones"></tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script th:inline="javascript">
+    var duracionPelicula = /*[[${pelicula.duracion}]]*/0;
+
+    const horaInicioInput = document.getElementById("horaInicio");
+    const horaFinInput = document.getElementById("horaFin");
+    const horaInicioHidden = document.getElementById("horaInicioHidden");
+    const horaFinHidden = document.getElementById("horaFinHidden");
+    const inputFecha = document.getElementById('fecha');
+    const tituloListaFunciones = document.getElementById('tituloListaFunciones');
+    const errorCruce = document.getElementById('errorCruce');
+    const msgFuncion = document.getElementById('msgFuncion'); 
+    const form = document.querySelector('form'); 
+    var titulo = tituloListaFunciones.innerText;
+
+    let funcionesExistentes = [];
+
+    async function cargarFunciones(fecha) {
+        try {
+            const response = await fetch(`/PaginaAdmin/funciones/existentesPorFecha/${fecha}`);
+            funcionesExistentes = await response.json();
+
+            const tbody = document.getElementById("tbodyFunciones");
+            tbody.innerHTML = "";
+
+            if (funcionesExistentes.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" class="text-center">No hay funciones registradas para esta película.</td></tr>`;
+                return funcionesExistentes;
+            }
+
+            funcionesExistentes.forEach(f => {
+                const fila = `
+                    <tr>
+                        <td>${f.tituloPelicula}</td>
+                        <td>${f.nombreSala}</td>
+                        <td>${f.fechaFuncion}</td>
+                        <td>${f.horaInicio}</td>
+                        <td>${f.horaFin}</td>
+                    </tr>`;
+                tbody.innerHTML += fila;
+            });
+
+            return funcionesExistentes;
+        } catch (error) {
+            console.error("Error al cargar funciones:", error);
+            return [];
+        }
+    }
+
+    inputFecha.addEventListener('change', async (event) => {
+        var fecha = event.target.value;
+        tituloListaFunciones.innerText = titulo + " " + fecha;
+        await cargarFunciones(fecha);
+    });
+
+    horaInicioInput.addEventListener("input", function() {
+        var hora = this.value.split(":");
+        if(hora.length !== 2) return;
+
+        var inicio = new Date();
+        inicio.setHours(parseInt(hora[0]));
+        inicio.setMinutes(parseInt(hora[1]));
+
+        var fin = new Date(inicio);
+        fin.setMinutes(fin.getMinutes() + duracionPelicula);
+
+        let cruce = funcionesExistentes.some(f => {
+            let inicioFunc = new Date();
+            let [hi, mi] = f.horaInicio.split(":").map(Number);
+            inicioFunc.setHours(hi, mi);
+
+            let finFunc = new Date();
+            let [hf, mf] = f.horaFin.split(":").map(Number);
+            finFunc.setHours(hf, mf);
+
+            return (inicio < finFunc && fin > inicioFunc);
+        });
+
+        if (cruce) {
+            errorCruce.classList.remove("hidden");
+            horaFinInput.value = "";
+            horaInicioHidden.value = "";
+            horaFinHidden.value = "";
+        } else {
+            errorCruce.classList.add("hidden");
+            var hh = String(fin.getHours()).padStart(2, "0");
+            var mm = String(fin.getMinutes()).padStart(2, "0");
+            var horaFinStr = hh + ":" + mm;
+            horaFinInput.value = horaFinStr;
+            horaInicioHidden.value = this.value;
+            horaFinHidden.value = horaFinStr;
+        }
+    });
+
+    form.addEventListener("submit", function(event) {
+        event.preventDefault();
+        const formData = new FormData(form);
+
+        fetch('/PaginaAdmin/funciones/guardar', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if(data.status === "ok") {
+                msgFuncion.classList.remove("hidden");
+                form.reset();
+                horaFinInput.value = "";
+                horaInicioHidden.value = "";
+                horaFinHidden.value = "";
+                errorCruce.classList.add("hidden");
+                cargarFunciones(inputFecha.value);
+            } else if(data.status === "cruceHorario") {
+                errorCruce.classList.remove("hidden");
+            } else {
+                alert("❌ Ocurrió un error al registrar la función.");
+            }
+        })
+        .catch(error => console.error("Error:", error));
+    });
+</script>
+</body>
+</html>

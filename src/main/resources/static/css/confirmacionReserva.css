@@ -1,0 +1,48 @@
+@charset "UTF-8";
+
+/* Fondo general */
+body {
+  background-color: #111;
+  color: #222;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Caja principal */
+.confirmacion-box {
+  max-width: 800px;
+  margin: 0 auto;
+  background: #fff;
+  padding: 2rem 3rem;
+  border-radius: 15px;
+}
+
+/* Títulos */
+.confirmacion-box h2 {
+  font-size: 1.8rem;
+}
+
+/* Resumen */
+.resumen-reserva p {
+  margin: 0.5rem 0;
+  font-size: 1rem;
+}
+
+/* Botones */
+.btn-danger {
+  border-radius: 8px;
+  font-weight: bold;
+}
+
+.btn-outline-secondary {
+  border-radius: 8px;
+}
+
+/* Ajustes del footer */
+footer {
+  margin-top: 100px;
+}
+
+select.form-select {
+  border-radius: 10px;
+  padding: 0.6rem;
+}

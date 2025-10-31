@@ -1,0 +1,17 @@
+.boton-acciones {
+    display: flex;
+    gap: 8px;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: flex-start;
+    white-space: nowrap;
+}
+
+.boton-acciones .btn {
+    font-size: 13px;
+    padding: 6px 10px;
+}
+
+.boton-acciones .btn i {
+    margin-right: 5px;
+}

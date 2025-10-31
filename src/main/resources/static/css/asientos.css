@@ -1,0 +1,117 @@
+
+/* 🎥 Asiento 3D más realista */
+.asiento {
+  width: 44px;
+  height: 48px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  border-radius: 10px 10px 6px 6px;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  color: white;
+  font-size: 11px;
+  font-weight: bold;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.4);
+  overflow: hidden;
+}
+
+/* ✨ Brillo superior (respaldo) */
+.asiento::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 2px;
+  right: 2px;
+  height: 55%;
+  border-radius: 10px 10px 0 0;
+  background: linear-gradient(to bottom, rgba(255,255,255,0.25), transparent);
+  z-index: 2;
+}
+
+/* 💺 Base o cojín inferior */
+.asiento::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 35%;
+  background: rgba(0,0,0,0.15);
+  border-top: 1px solid rgba(255,255,255,0.08);
+  z-index: 1;
+}
+
+/* 🟦 Libre */
+.asiento.libre {
+  background: linear-gradient(180deg, #3b82f6 0%, #1e3a8a 100%);
+  box-shadow: inset 0 2px 3px rgba(255,255,255,0.2),
+              0 5px 0 rgba(17,24,39,0.9);
+}
+
+/* 🔴 Ocupado */
+.asiento.ocupado {
+  background: linear-gradient(180deg, #ef4444 0%, #7f1d1d 100%);
+  box-shadow: inset 0 2px 3px rgba(255,255,255,0.15),
+              0 5px 0 rgba(69,10,10,1);
+  opacity: 0.85;
+  cursor: not-allowed;
+}
+
+/* 🟩 Seleccionado */
+.asiento.seleccionado {
+  background: linear-gradient(180deg, #34d399 0%, #065f46 100%);
+  box-shadow: inset 0 2px 4px rgba(255,255,255,0.2),
+              0 5px 0 rgba(6,78,59,1);
+  transform: translateY(-3px);
+}
+
+/* 🟨 VIP */
+.asiento.vip {
+  background: linear-gradient(180deg, #facc15 0%, #b45309 100%);
+  box-shadow: inset 0 2px 3px rgba(255,255,255,0.2),
+              0 5px 0 rgba(146,64,14,1);
+  border: 2px solid rgba(255,255,255,0.2);
+}
+
+/* 💡 Hover animado */
+.asiento.libre:hover:not(.ocupado) {
+  transform: translateY(-6px) scale(1.08);
+  box-shadow: 0 8px 16px rgba(0,0,0,0.35);
+}
+
+/* 🪶 Efecto textura (opcional, cuero) */
+.asiento {
+  background-image:
+    radial-gradient(circle at 30% 30%, rgba(255,255,255,0.05) 0%, transparent 70%),
+    repeating-linear-gradient(45deg, rgba(255,255,255,0.04) 0 2px, transparent 2px 4px);
+  background-blend-mode: overlay;
+}
+
+/* Centrado del código del asiento */
+.asiento span {
+  position: relative;
+  z-index: 3;
+  padding-bottom: 4px;
+}
+
+
+/* layout: si usas grid de 10 columnas ya está; si no, forzamos centrado */
+.zona .asiento { margin: 0; }
+
+/* leyenda rápida (opcional) */
+.leyenda-item { display:flex; gap:0.5rem; align-items:center; }
+.leyenda-color { width:18px; height:18px; border-radius:4px; }
+
+/* accesibilidad: foco */
+.asiento:focus {
+  outline: 3px solid rgba(255,255,255,0.18);
+  outline-offset: 2px;
+}
+
+/* responsive: reduce tamaño en pantallas pequeñas */
+@media (max-width: 640px) {
+  .asiento { width:34px; height:34px; border-radius:6px; font-size:11px; }
+  .zona .grid { gap:0.35rem; }
+}

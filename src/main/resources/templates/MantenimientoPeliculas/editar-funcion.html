@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Editar Función</title>
+
+    <!-- Fuente Poppins -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 font-poppins">
+
+<!-- Header -->
+<div class="fixed top-0 w-full z-50 bg-white shadow-md flex items-center justify-between px-6 py-4">
+    <div class="flex items-center gap-3 text-lg font-semibold text-gray-800">
+        <i class="fa-solid fa-film text-yellow-500"></i> Editar Función
+    </div>
+    <div class="text-gray-600">
+        Bienvenido: <span th:text="${adminNombre}">admin@example.com</span>
+    </div>
+</div>
+
+<!-- Layout principal -->
+<div class="flex pt-20 min-h-screen">
+
+    <!-- Sidebar -->
+    <div class="w-60 bg-gray-800 text-gray-200 fixed top-20 left-0 h-[calc(100vh-5rem)] overflow-y-auto shadow-lg rounded-r-xl">
+        <nav class="flex flex-col mt-4">
+            <a th:href="@{/mantenimientoPeliculas/lista}" class="flex items-center gap-3 px-6 py-3 rounded-lg hover:bg-gray-700 transition-colors">
+                <i class="fa-solid fa-film text-green-400"></i> Lista de Películas
+            </a>
+            <a th:href="@{/mantenimientoPeliculas/nuevo}" class="flex items-center gap-3 px-6 py-3 rounded-lg hover:bg-gray-700 transition-colors">
+                <i class="fa-solid fa-plus text-green-400"></i> Registrar Película
+            </a>
+            <a th:href="@{/PaginaAdmin/funciones/listar}" class="flex items-center gap-3 px-6 py-3 rounded-lg hover:bg-gray-700 transition-colors">
+                <i class="fa-solid fa-list text-yellow-400"></i> Listar Funciones
+            </a>
+            <a th:href="@{/Cliente/listar}" class="flex items-center gap-3 px-6 py-3 rounded-lg hover:bg-gray-700 transition-colors">
+                <i class="fa-solid fa-users text-green-400"></i> Lista de Clientes
+            </a>
+            <a th:href="@{/logout}" class="flex items-center gap-3 px-6 py-3 rounded-lg hover:bg-red-600 transition-colors mt-auto">
+                <i class="fa-solid fa-right-from-bracket text-red-400"></i> Cerrar sesión
+            </a>
+        </nav>
+    </div>
+
+    <!-- Contenido principal -->
+    <div class="ml-60 flex-1 p-8">
+        <div class="max-w-4xl mx-auto">
+
+            <!-- Mensaje -->
+            <div th:if="${msg != null}" class="alert alert-success text-center fw-bold mb-4" 
+                 th:text="${msg == 'editOk' ? '✅ Función editada correctamente.' : (msg == 'cruceHorario' ? '⚠️ Esta función cruza con otra existente.' : '❌ Ocurrió un error, intente nuevamente.')}">
+            </div>
+
+            <h2 class="text-center text-2xl font-bold text-blue-600 mb-6" th:text="'Editar función de: ' + ${funcion.pelicula.titulo}"></h2>
+
+            <!-- Formulario -->
+            <div class="card shadow-lg rounded-2xl p-6 bg-white mb-6">
+                <form th:action="@{/PaginaAdmin/funciones/actualizar}" th:object="${funcion}" method="post">
+                    <input type="hidden" th:field="*{idFuncion}" />
+                    <input type="hidden" th:field="*{pelicula.idPelicula}" />
+
+                    <div class="mb-4">
+                        <label for="sala" class="form-label fw-semibold">Sala</label>
+                        <select id="sala" class="form-select" th:field="*{sala.idSala}" required>
+                            <option value="" disabled>Selecciona una sala</option>
+                            <option th:each="s : ${salas}" th:value="${s.idSala}" th:text="${s.nombreSala}" th:selected="${s.idSala == funcion.sala.idSala}"></option>
+                        </select>
+                    </div>
+
+					<div class="mb-3">
+								    <label for="fecha" class="form-label">Fecha</label>
+								    <input type="date" id="fecha" class="form-control"
+								           name="fechaFuncion"
+								           th:value="${funcion.fechaFuncion != null} ? ${#temporals.format(funcion.fechaFuncion, 'yyyy-MM-dd')} : ${#temporals.format(T(java.time.LocalDate).now(), 'yyyy-MM-dd')}"
+								           required>
+								    <div class="invalid-feedback"></div> <!-- Aquí se mostrarán los errores -->
+								</div>
+
+                    <div class="mb-4">
+                        <label for="horaInicio" class="form-label fw-semibold">Hora de Inicio</label>
+                        <input type="time" class="form-control" id="horaInicio" th:field="*{horaInicio}" 
+                               th:value="${funcion.horaInicio != null} ? ${#temporals.format(funcion.horaInicio, 'HH:mm')} : ''" 
+                               th:data-duracion="${funcion.pelicula != null} ? ${funcion.pelicula.duracion} : 0" required>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="horaFin" class="form-label fw-semibold">Hora de Fin</label>
+                        <input type="time" id="horaFin" class="form-control" th:field="*{horaFin}" readonly>
+                    </div>
+
+                    <div class="flex justify-center mt-6">
+                        <button type="submit" class="btn btn-warning text-dark fw-bold">
+                            <i class="fa-solid fa-pen-to-square"></i> Actualizar Función
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Tabla de funciones existentes -->
+            <div class="card shadow-lg rounded-2xl p-4 bg-white">
+                <h4 class="text-center text-gray-700 mb-4">Funciones existentes de esta película</h4>
+                <table class="table table-bordered table-striped">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Sala</th>
+                            <th>Fecha</th>
+                            <th>Hora Inicio</th>
+                            <th>Hora Fin</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="f : ${funcionesExistentes}">
+                            <td th:text="${f.sala.nombreSala}">Sala 1</td>
+                            <td th:text="${#temporals.format(f.fechaFuncion, 'dd/MM/yyyy')}"></td>
+                            <td th:text="${f.horaInicio}">14:00</td>
+                            <td th:text="${f.horaFin}">16:30</td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(funcionesExistentes)}">
+                            <td colspan="4" class="text-center">No hay funciones registradas para esta película.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script th:src="@{/script/editarFuncion.js}" th:inline="javascript"></script>
+</body>
+</html>
+

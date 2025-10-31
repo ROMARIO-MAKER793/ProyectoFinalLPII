@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Detalles de Película - Cine Online</title>
+
+    <!-- Fuente Poppins -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 font-poppins">
+
+<!-- Header -->
+<div class="fixed top-0 w-full z-50 bg-white shadow-md flex items-center justify-between px-6 py-4">
+    <div class="flex items-center gap-3 text-lg font-semibold text-gray-800">
+        <i class="fa-solid fa-user-shield text-yellow-500"></i> Panel de Administración - Cine Online
+    </div>
+</div>
+
+<!-- Layout principal -->
+<div class="flex pt-20 min-h-screen">
+
+    <!-- Sidebar -->
+    <div class="w-60 bg-gray-800 text-gray-200 fixed top-20 left-0 h-[calc(100vh-5rem)] overflow-y-auto shadow-lg rounded-r-xl">
+        <nav class="flex flex-col mt-4">
+            <a th:href="@{/mantenimientoPeliculas/lista}" class="flex items-center gap-3 px-6 py-3 rounded-lg hover:bg-gray-700 transition-colors">
+                <i class="fa-solid fa-film text-green-400"></i> Lista de Películas
+            </a>
+            <a th:href="@{/mantenimientoPeliculas/nuevo}" class="flex items-center gap-3 px-6 py-3 rounded-lg hover:bg-gray-700 transition-colors">
+                <i class="fa-solid fa-plus text-green-400"></i> Registrar Película
+            </a>
+            <a th:href="@{/PaginaAdmin/funciones/listar}" class="flex items-center gap-3 px-6 py-3 rounded-lg hover:bg-gray-700 transition-colors">
+                <i class="fa-solid fa-list text-yellow-400"></i> Listar Funciones
+            </a>
+            <a th:href="@{/Cliente/listar}" class="flex items-center gap-3 px-6 py-3 rounded-lg hover:bg-gray-700 transition-colors">
+                <i class="fa-solid fa-users text-green-400"></i> Lista de Clientes
+            </a>
+            <a th:href="@{/logout}" class="flex items-center gap-3 px-6 py-3 rounded-lg hover:bg-red-600 transition-colors mt-auto">
+                <i class="fa-solid fa-right-from-bracket text-red-400"></i> Cerrar sesión
+            </a>
+        </nav>
+    </div>
+
+    <!-- Contenido principal -->
+    <div class="ml-60 flex-1 p-8">
+        <div class="max-w-4xl mx-auto">
+            <h2 class="text-center text-2xl font-bold text-blue-600 mb-6">Detalles de la Película</h2>
+
+            <div class="card shadow-lg rounded-2xl p-6 bg-white">
+                <div class="card-body">
+                    <div class="mb-4 text-center">
+                        <img th:src="@{/img/{img}(img=${pelicula.imagen})}" 
+                             alt="Película" class="img-thumbnail" style="max-height: 200px;">
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="form-label fw-semibold">Título</label>
+                            <input type="text" class="form-control" th:value="${pelicula.titulo}" readonly>
+                        </div>
+                        <div>
+                            <label class="form-label fw-semibold">Duración (min)</label>
+                            <input type="text" class="form-control" th:value="${pelicula.duracion}" readonly>
+                        </div>
+                        <div>
+                            <label class="form-label fw-semibold">Idioma</label>
+                            <input type="text" class="form-control" th:value="${pelicula.idioma}" readonly>
+                        </div>
+                        <div>
+                            <label class="form-label fw-semibold">Clasificación</label>
+                            <input type="text" class="form-control" th:value="${pelicula.clasificacion.etiqueta}" readonly>
+                        </div>
+                        <div>
+                            <label class="form-label fw-semibold">Géneros</label>
+                            <input type="text" class="form-control" th:value="${generosStr}" readonly>
+                        </div>
+                        <div>
+                            <label class="form-label fw-semibold">Fecha de Estreno</label>
+                            <input type="text" class="form-control" 
+                                   th:value="${#dates.format(pelicula.fechaEstreno, 'dd/MM/yyyy')}" readonly>
+                        </div>
+                        <div>
+                            <label class="form-label fw-semibold">Precio</label>
+                            <input type="text" class="form-control" th:value="'S/. ' + ${pelicula.precio}" readonly>
+                        </div>
+                        <div>
+                            <label class="form-label fw-semibold">Estado</label>
+                            <input type="text" class="form-control" th:value="${pelicula.estado}" readonly>
+                        </div>
+                    </div>
+
+                    <div class="text-center mt-6">
+                        <a th:href="@{/mantenimientoPeliculas/lista}" class="btn btn-secondary">
+                            <i class="fa-solid fa-arrow-left"></i> Volver
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
+
