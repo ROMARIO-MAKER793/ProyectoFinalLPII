@@ -35,7 +35,7 @@
 	}
 
 
-
+/*
 .pelicula-card {
   width: 250px;
   height: 350px;
@@ -112,7 +112,7 @@
 }
 
 
-/* Efecto al pasar el mouse */
+ Efecto al pasar el mouse 
 .overlay {
   position: absolute;
   inset: 0;
@@ -125,7 +125,7 @@
   opacity: 1;
 }
 
-/* Botón dentro de la imagen */
+ Botón dentro de la imagen 
 .overlay .btn {
   border-radius: 20px;
   padding: 0.5rem 1.2rem;
@@ -139,4 +139,4 @@
   color: #ff4040;
   font-weight: bold;
 }
-
+*/

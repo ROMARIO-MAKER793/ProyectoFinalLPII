@@ -51,7 +51,9 @@ public class CarteleraController {
             List<Funcion> funcionesFiltradas = (fecha == null && (generosSeleccionados == null || generosSeleccionados.isEmpty()))
                     ? funcionService.listar()
                     : funcionService.filtrarPorFechaYGenero(fecha, generosSeleccionados);
-
+            
+            /*Bloque para listar las peliculas con funciones*/
+            
             Map<Integer, List<Funcion>> funcionMap = new HashMap<>();
             List<Pelicula> peliculas = peliculaService.listar();
 

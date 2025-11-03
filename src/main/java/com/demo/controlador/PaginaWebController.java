@@ -4,6 +4,7 @@ import com.demo.model.Pelicula;
 import com.demo.model.Usuario;
 import com.demo.repositorio.PeliculaRepositorio;
 import com.demo.repositorio.UsuarioRepositorio;
+import com.demo.service.FuncionService;
 import com.demo.service.PeliculaService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,18 +23,32 @@ public class PaginaWebController {
 	private UsuarioRepositorio usuariorepositorio;
     @Autowired
     private PeliculaService peliculaRepositorio;
-
+    
+    @Autowired
+    private FuncionService funcionService;
    /* @GetMapping({"/","PaginaWeb/index"})
     public String mostrarIndex(Model model, Authentication au) {
         List<Pelicula> peliculas = peliculaRepositorio.listarActivas();*/
     @GetMapping({"/","/PaginaWeb/index"})
 	 public String mostrarInicio(Model model, Authentication au) {
-	     List<Pelicula> estrenos = peliculaRepositorio.findByIsEstrenoTrue()
-	                                                  .stream()
-	                                                  .sorted((a, b) -> b.getIdPelicula().compareTo(a.getIdPelicula()))
-	                                                  .toList();
+    	
+    	List<Integer> peliculasConFunciones = funcionService.listar().stream()
+    	        .map(f -> f.getPelicula().getIdPelicula())
+    	        .distinct()
+    	        .toList();
+    	
+	     List<Pelicula> estrenos = peliculaRepositorio.listarActivas()
+	    		 	
+	    		 .stream()
+	    	        .filter(p -> p.isEstreno() && peliculasConFunciones.contains(p.getIdPelicula()))
+	    	        .sorted((a, b) -> b.getIdPelicula().compareTo(a.getIdPelicula()))
+	    	        .toList();
+	    		
+		
+	    		 									
 
-        List<Pelicula> novedades =  peliculaRepositorio.listarActivas() .stream()
+        List<Pelicula> novedades =  peliculaRepositorio.listarActivas() 
+        		.stream()
                 .sorted((p1, p2) -> p2.getIdPelicula().compareTo(p1.getIdPelicula()))
                 .limit(15)
                 .collect(Collectors.toList());

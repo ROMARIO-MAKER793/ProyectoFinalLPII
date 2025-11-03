@@ -72,10 +72,14 @@
   	  <div th:each="p, stat : ${peliculas}"
   	       th:class="'slide ' + (${stat.index == 0} ? 'active' : '')"
   	       th:style="'background-image: url(' + @{/img/{imagen}(imagen=${p.imagen})} + ')'">
+		 
+		   <!-- 🟥 Franja de Estreno -->
+		   				    <div th:if="${p.estreno}" class="franja-estreno">Estreno</div>
 
   	    <div class="absolute inset-0 slide-content flex flex-col justify-end pb-12 pl-12 text-white">
   	      <h2 class="text-4xl font-bold mb-2" th:text="${p.titulo}">Título película</h2>
   	      <p class="text-gray-200 mb-4 max-w-lg" th:text="${p.descripcion}">Descripción breve</p>
+		
 
   	      <div class="flex gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
 			<a th:href="@{'/pelicula/detalle/' + ${p.idPelicula}}" 
@@ -98,50 +102,153 @@
   	  <div id="indicators" class="absolute bottom-5 left-1/2 transform -translate-x-1/2 flex gap-3 z-20"></div>
   	</section>
 	
-	<!-- Carrusel Inferior-->
-	<section class="py-5 bg-white relative">
-	  <div class="container mx-auto relative">
-	    <h2 class="text-4xl text-center mb-4 font-bold font-[Poppins]  uppercase text-red-500 ">🎞️ Películas</h2>
+	<section class="py-16 bg-black">
+	  <div class="container mx-auto px-6">
+	    <h2 class="text-3xl md:text-4xl font-extrabold text-center mb-10 text-red-500 uppercase tracking-widest">
+	      🎞️ Estrenos Destacados
+	    </h2>
 
-	    <!-- Contenedor del carrusel -->
-	    <div class="relative flex items-center justify-center">
+	    <div class="grid grid-cols-2 md:grid-cols-3 gap-5 auto-rows-[300px]">
 
-	      <!-- Botón izquierda -->
-	      <button 
-	        class="scroll-btn left absolute -left-10 z-10 bg-red-600 hover:bg-red-700 text-white rounded-full w-12 h-12 flex items-center justify-center shadow-lg transition">
-	        <i class="bi bi-chevron-left text-2xl"></i>
-	      </button>
-
-	      <!-- Carrusel centrado -->
-	      <div id="novedadesCarrusel" 
-	           class="flex gap-4 overflow-hidden scroll-smooth w-[90%] mx-auto py-4 justify-center">
-	        <div class="pelicula-card flex-shrink-0" 
-	             th:each="p, iterStat : ${novedades}" 
-	             th:if="${iterStat.index < 12}">
-	          <img th:src="@{'/img/' + ${p.imagen}}" 
-	               th:alt="${p.titulo}" 
-	               class="w-full h-full object-cover rounded-lg">
-				   <!-- 🟥 Franja de Estreno -->
-				    <div th:if="${p.estreno}" class="franja-estreno">Estreno</div>
-	          
-	          <div class="overlay absolute inset-0 bg-black/70 opacity-0 flex flex-col items-center justify-center text-center p-3 rounded-lg transition-opacity duration-300 hover:opacity-100">
-	            <h5 class="text-white font-bold text-lg" th:text="${p.titulo}"></h5>
-	            <a th:href="@{'/pelicula/detalle/' + ${p.idPelicula}}" 
-	               class="mt-2 bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded-full transition">
-	               Ver Detalle
-	            </a>
-	          </div>
+	      <!-- 🟥 Película 1 (grande, ocupa 2 columnas y 2 filas) -->
+	      <div class="relative col-span-2 row-span-2 group overflow-hidden rounded-2xl">
+	        <img th:src="@{'/img/' + ${novedades[0].imagen}}" 
+			
+	             th:alt="${novedades[0].titulo}" 
+	             class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 group-hover:brightness-75" />
+				 <!-- 🟥 Franja de Estreno -->
+				  <div th:if="${novedades[0].estreno}" 
+				       class="absolute top-3 left-3 bg-red-600 text-white text-xs font-semibold px-3 py-1 rounded-md shadow-md uppercase tracking-wider">
+				    Estreno
+				  </div>
+	        <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col justify-center items-center">
+	          <h5 class="text-white text-xl font-bold mb-2" th:text="${novedades[0].titulo}"></h5>
+	          <a th:href="@{'/pelicula/detalle/' + ${novedades[0].idPelicula}}" 
+	             class="bg-red-600 hover:bg-red-700 text-white py-2 px-5 rounded-full font-semibold">Ver Detalle</a>
 	        </div>
 	      </div>
 
-	      <!-- Botón derecha -->
-	      <button 
-	        class="scroll-btn right absolute -right-10 z-10 bg-red-600 hover:bg-red-700 text-white rounded-full w-12 h-12 flex items-center justify-center shadow-lg transition">
-	        <i class="bi bi-chevron-right text-2xl"></i>
-	      </button>
+	      <!-- 🟩 Película 2 -->
+	      <div class="relative group overflow-hidden rounded-2xl">
+	        <img th:src="@{'/img/' + ${novedades[1].imagen}}" 
+	             th:alt="${novedades[1].titulo}" 
+	             class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 group-hover:brightness-75" />
+				 <!-- 🟥 Franja de Estreno -->
+				 			  <div th:if="${novedades[0].estreno}" 
+				 			       class="absolute top-3 left-3 bg-red-600 text-white text-xs font-semibold px-3 py-1 rounded-md shadow-md uppercase tracking-wider">
+				 			    Estreno
+				 			  </div>
+	        <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col justify-center items-center">
+	          <h5 class="text-white text-lg font-bold mb-2" th:text="${novedades[1].titulo}"></h5>
+	          <a th:href="@{'/pelicula/detalle/' + ${novedades[1].idPelicula}}" 
+	             class="bg-red-600 hover:bg-red-700 text-white py-1 px-4 rounded-full font-semibold text-sm">Ver Detalle</a>
+	        </div>
+	      </div>
+
+	      <!-- 🟨 Película 3 -->
+	      <div class="relative group overflow-hidden rounded-2xl">
+	        <img th:src="@{'/img/' + ${novedades[2].imagen}}" 
+	             th:alt="${novedades[2].titulo}" 
+	             class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 group-hover:brightness-75" />
+				 <!-- 🟥 Franja de Estreno -->
+				 			  <div th:if="${novedades[0].estreno}" 
+				 			       class="absolute top-3 left-3 bg-red-600 text-white text-xs font-semibold px-3 py-1 rounded-md shadow-md uppercase tracking-wider">
+				 			    Estreno
+				 			  </div>
+	        <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col justify-center items-center">
+	          <h5 class="text-white text-lg font-bold mb-2" th:text="${novedades[2].titulo}"></h5>
+	          <a th:href="@{'/pelicula/detalle/' + ${novedades[2].idPelicula}}" 
+	             class="bg-red-600 hover:bg-red-700 text-white py-1 px-4 rounded-full font-semibold text-sm">Ver Detalle</a>
+	        </div>
+	      </div>
+
+	      <!-- 🟦 Película 4 (mediana) -->
+	      <div class="relative col-span-1 row-span-1 group overflow-hidden rounded-2xl">
+	        <img th:src="@{'/img/' + ${novedades[3].imagen}}" 
+	             th:alt="${novedades[3].titulo}" 
+	             class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 group-hover:brightness-75" />
+				 <!-- 🟥 Franja de Estreno -->
+				 			  <div th:if="${novedades[0].estreno}" 
+				 			       class="absolute top-3 left-3 bg-red-600 text-white text-xs font-semibold px-3 py-1 rounded-md shadow-md uppercase tracking-wider">
+				 			    Estreno
+				 			  </div>
+	        <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col justify-center items-center">
+	          <h5 class="text-white text-lg font-bold mb-2" th:text="${novedades[3].titulo}"></h5>
+	          <a th:href="@{'/pelicula/detalle/' + ${novedades[3].idPelicula}}" 
+	             class="bg-red-600 hover:bg-red-700 text-white py-1 px-4 rounded-full font-semibold text-sm">Ver Detalle</a>
+	        </div>
+	      </div>
+
+	      <!-- 🟧 Película 5 -->
+	      <div class="relative group overflow-hidden rounded-2xl">
+	        <img th:src="@{'/img/' + ${novedades[4].imagen}}" 
+	             th:alt="${novedades[4].titulo}" 
+	             class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 group-hover:brightness-75" />
+				 <!-- 🟥 Franja de Estreno -->
+				 			 			  <div th:if="${novedades[0].estreno}" 
+				 			 			       class="absolute top-3 left-3 bg-red-600 text-white text-xs font-semibold px-3 py-1 rounded-md shadow-md uppercase tracking-wider">
+				 			 			    Estreno
+				 			 			  </div>
+	        <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col justify-center items-center">
+	          <h5 class="text-white text-lg font-bold mb-2" th:text="${novedades[4].titulo}"></h5>
+	          <a th:href="@{'/pelicula/detalle/' + ${novedades[4].idPelicula}}" 
+	             class="bg-red-600 hover:bg-red-700 text-white py-1 px-4 rounded-full font-semibold text-sm">Ver Detalle</a>
+	        </div>
+	      </div>
+
+	      <!-- 🟪 Película 6 -->
+	      <div class="relative group overflow-hidden rounded-2xl">
+	        <img th:src="@{'/img/' + ${novedades[5].imagen}}" 
+	             th:alt="${novedades[5].titulo}" 
+	             class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 group-hover:brightness-75" />
+	        <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col justify-center items-center">
+	          <h5 class="text-white text-lg font-bold mb-2" th:text="${novedades[5].titulo}"></h5>
+	          <a th:href="@{'/pelicula/detalle/' + ${novedades[5].idPelicula}}" 
+	             class="bg-red-600 hover:bg-red-700 text-white py-1 px-4 rounded-full font-semibold text-sm">Ver Detalle</a>
+	        </div>
+	      </div>
+		  
+		  <!-- 🟪 Película 7 -->
+		        <div class="relative group overflow-hidden rounded-2xl">
+		          <img th:src="@{'/img/' + ${novedades[6].imagen}}" 
+		               th:alt="${novedades[6].titulo}" 
+		               class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 group-hover:brightness-75" />
+		          <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col justify-center items-center">
+		            <h5 class="text-white text-lg font-bold mb-2" th:text="${novedades[6].titulo}"></h5>
+		            <a th:href="@{'/pelicula/detalle/' + ${novedades[6].idPelicula}}" 
+		               class="bg-red-600 hover:bg-red-700 text-white py-1 px-4 rounded-full font-semibold text-sm">Ver Detalle</a>
+		          </div>
+		        </div>
+				
+				<!-- 🟪 Película 8 -->
+					        <div class="relative group overflow-hidden rounded-2xl">
+					          <img th:src="@{'/img/' + ${novedades[7].imagen}}" 
+					               th:alt="${novedades[7].titulo}" 
+					               class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 group-hover:brightness-75" />
+					          <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col justify-center items-center">
+					            <h5 class="text-white text-lg font-bold mb-2" th:text="${novedades[7].titulo}"></h5>
+					            <a th:href="@{'/pelicula/detalle/' + ${novedades[7].idPelicula}}" 
+					               class="bg-red-600 hover:bg-red-700 text-white py-1 px-4 rounded-full font-semibold text-sm">Ver Detalle</a>
+					          </div>
+					        </div>
+							<!-- 🟪 Película 9 -->
+								        <div class="relative group overflow-hidden rounded-2xl">
+								          <img th:src="@{'/img/' + ${novedades[8].imagen}}" 
+								               th:alt="${novedades[8].titulo}" 
+								               class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 group-hover:brightness-75" />
+								          <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col justify-center items-center">
+								            <h5 class="text-white text-lg font-bold mb-2" th:text="${novedades[8].titulo}"></h5>
+								            <a th:href="@{'/pelicula/detalle/' + ${novedades[8].idPelicula}}" 
+								               class="bg-red-600 hover:bg-red-700 text-white py-1 px-4 rounded-full font-semibold text-sm">Ver Detalle</a>
+								          </div>
+								        </div>
+
 	    </div>
 	  </div>
 	</section>
+
+
+
 
 
 	<!-- ⚫ FOOTER -->
