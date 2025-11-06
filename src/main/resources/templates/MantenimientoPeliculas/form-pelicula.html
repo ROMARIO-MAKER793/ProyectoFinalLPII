@@ -155,28 +155,19 @@
 	</main>
 
 
-  <!-- SweetAlert Mensajes -->
-  <script th:if="${msg != null}">
-    let mensaje = [[${msg}]];
+	<!-- marcador en el HTML -->
+	<div id="msg-container" th:data-msg="${msg}"></div>
 
-    if (mensaje === 'ok') {
-      Swal.fire({
-        icon: 'success',
-        title: 'Película guardada correctamente',
-        text: 'La película se ha registrado o editado exitosamente.',
-        confirmButtonColor: '#4f46e5',
-        confirmButtonText: 'Aceptar'
-      });
-    } else if (mensaje === 'exception') {
-      Swal.fire({
-        icon: 'error',
-        title: 'Error al guardar',
-        text: 'Ocurrió un error inesperado. Inténtalo nuevamente.',
-        confirmButtonColor: '#dc2626',
-        confirmButtonText: 'Aceptar'
-      });
-    }
-  </script>
+	<script>
+	  const mensaje = document.getElementById('msg-container').dataset.msg;
+
+	  if (mensaje === 'ok') {
+	    Swal.fire({ icon: 'success', title: 'Película guardada correctamente', text: 'La película se ha registrado o editado exitosamente.' });
+	  } else if (mensaje === 'exception') {
+	    Swal.fire({ icon: 'error', title: 'Error al guardar', text: 'Ocurrió un error inesperado. Inténtalo nuevamente.' });
+	  }
+	</script>
+
 
 </body>
 </html>
